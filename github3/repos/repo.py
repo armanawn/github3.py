@@ -326,18 +326,29 @@ class Repository(GitHubCore):
         return self._instance_or_null(PullRequest, json)
 
     @requires_auth
-    def add_collaborator(self, username):
+    def add_collaborator(self, username, permission=''):
         """Add ``username`` as a collaborator to a repository.
 
         :param username: (required), username of the user
         :type username: str or :class:`User <github3.users.User>`
-        :returns: bool -- True if successful, False otherwise
+
+        :param str permission: (optional), options:
+
+            - ``pull`` -- can pull, but not push to 
+                or administer this repository.
+            - ``push`` -- (default) can pull and push, but 
+                not administer this repository.
+            - ``admin`` -- can pull, push and administer this 
+                repository.
+
+        :returns: bool -- True if successful, False otherwise                
         """
         if not username:
             return False
+        data = {'permission': permission}
         url = self._build_url('collaborators', str(username),
                               base_url=self._api)
-        return self._boolean(self._put(url), 204, 404)
+        return self._boolean(self._put(url, data=dumps(data)), 204, 404)
 
     def archive(self, format, path='', ref='master'):
         """Get the tarball or zipball archive for this repo at ref.
