@@ -387,7 +387,7 @@ class Organization(BaseAccount):
         return self._boolean(self._delete(url), 204, 404)
 
     @requires_auth
-    def create_team(self, name, repo_names=[], permission=''):
+    def create_team(self, name, repo_names=[], privacy='', permission=''):
         """Create a new team and return it.
 
         This only works if the authenticated user owns this organization.
@@ -395,7 +395,14 @@ class Organization(BaseAccount):
         :param str name: (required), name to be given to the team
         :param list repo_names: (optional) repositories, e.g.
             ['github/dotfiles']
-        :param str permission: (optional), options:
+        :param str privacy (optional), options:
+
+            - ``secret`` -- (default) only visible to organization 
+                owners and members of this team
+            - ``closed`` -- visible to all members of this organization
+                repositories accessible by this team
+
+        :param str permission: (optional, deprecated), options:
 
             - ``pull`` -- (default) members can not push or administer
                 repositories accessible by this team
@@ -407,7 +414,7 @@ class Organization(BaseAccount):
         :returns: :class:`Team <Team>`
         """
         data = {'name': name, 'repo_names': repo_names,
-                'permission': permission}
+                'privacy': privacy, 'permission': permission}
         url = self._build_url('teams', base_url=self._api)
         json = self._json(self._post(url, data), 201)
         return self._instance_or_null(Team, json)
