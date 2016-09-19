@@ -728,7 +728,7 @@ class Repository(GitHubCore):
 
     @requires_auth
     def create_file(self, path, message, content, branch=None,
-                    committer=None, author=None):
+                    committer=None, author=None, sha=None):
         """Create a file in this repository.
 
         See also: http://developer.github.com/v3/repos/contents/#create-a-file
@@ -759,7 +759,7 @@ class Repository(GitHubCore):
             content = b64encode(content).decode('utf-8')
             data = {'message': message, 'content': content, 'branch': branch,
                     'committer': validate_commmitter(committer),
-                    'author': validate_commmitter(author)}
+                    'author': validate_commmitter(author), 'sha':sha}
             self._remove_none(data)
             json = self._json(self._put(url, data=dumps(data)), 201)
             if json and 'content' in json and 'commit' in json:
