@@ -326,7 +326,7 @@ class Repository(GitHubCore):
         return self._instance_or_null(PullRequest, json)
 
     @requires_auth
-    def add_collaborator(self, username, permission=''):
+    def add_collaborator(self, username, permission='push'):
         """Add ``username`` as a collaborator to a repository.
 
         :param username: (required), username of the user
