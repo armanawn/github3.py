@@ -325,6 +325,15 @@ class Repository(GitHubCore):
             json = self._json(self._post(url, data=data), 201)
         return self._instance_or_null(PullRequest, json)
 
+
+    def _update_pull(self, data, number):
+        self._remove_none(data)
+        json = None
+        if int(number) > 0:
+            url = self._build_url('pulls', str(number), base_url=self._api)
+            json = self._json(self._patch(url, data=dumps(data)), 200)
+        return self._instance_or_null(PullRequest, json)
+
     @requires_auth
     def add_collaborator(self, username, permission='push'):
         """Add ``username`` as a collaborator to a repository.
@@ -912,6 +921,15 @@ class Repository(GitHubCore):
         data = {'title': title, 'body': body, 'base': base,
                 'head': head}
         return self._create_pull(data)
+
+    @requires_auth
+    def update_pull(self, number, title=None, body=None, state=None, base=None):
+        """
+        TODO!!!!
+        """
+        data = {'title': title, 'body': body, 'state': state,
+                'base': base}
+        return self._update_pull(data, number)
 
     @requires_auth
     def create_pull_from_issue(self, issue, base, head):
