@@ -753,7 +753,6 @@ class Repository(GitHubCore):
         :param dict author: (optional), if omitted this will be filled in with
             committer information. If passed, you must specify both a name and
             email.
-        :param string sha: The blob SHA if we are updating an existing file.
         :returns: {
             'content': :class:`Contents <github3.repos.contents.Contents>`:,
             'commit': :class:`Commit <github3.git.Commit>`}
