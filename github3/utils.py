@@ -81,7 +81,7 @@ def stream_response_to_file(response, path=None):
     fd = None
     filename = None
     if path:
-        if isinstance(getattr(path, 'write', None), collections.Callable):
+        if isinstance(getattr(path, 'write', None), collections.abc.Callable):
             pre_opened = True
             fd = path
             filename = getattr(fd, 'name', None)
